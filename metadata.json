@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Abdullah Quran academy UK ",
+  "description": "Official online Quran academy providing 1-on-1 live classes for kids and female in the UK. Learn Noorani Qaida, Tajweed, Quran reading, and Hifz with certified female tutors. Book a 3-Day Free Trial today.\n\n",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

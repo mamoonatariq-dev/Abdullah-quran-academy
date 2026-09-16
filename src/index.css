@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/* High-Performance Pure CSS Animations (Zero JavaScript, 60fps GPU Accelerated) */
+/* -------------------------------------------------------------------------- */
+
+@keyframes pureFadeUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pureScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.96, 0.96, 1) translate3d(0, 12px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pureFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@keyframes purePulseBadge {
+  0%, 100% {
+    transform: scale3d(1, 1, 1);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    transform: scale3d(1.03, 1.03, 1);
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+  }
+}
+
+/* Headings Entrance Animations */
+.animate-heading {
+  animation: pureFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.animate-subheading {
+  animation: pureFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Boxes Entrance Animations */
+.animate-box {
+  animation: pureScaleIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Pure CSS Stagger Delays (Zero JS computation) */
+.anim-delay-1 { animation-delay: 0.06s; }
+.anim-delay-2 { animation-delay: 0.12s; }
+.anim-delay-3 { animation-delay: 0.18s; }
+.anim-delay-4 { animation-delay: 0.24s; }
+.anim-delay-5 { animation-delay: 0.30s; }
+.anim-delay-6 { animation-delay: 0.36s; }
+
+/* Box Micro-Interactions & Hover Elevation */
+.box-hover-lift {
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.26s ease;
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.box-hover-lift:hover {
+  transform: translate3d(0, -5px, 0);
+  box-shadow: 0 16px 30px -8px rgba(11, 60, 45, 0.14), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+}
+
+.box-hover-glow:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+/* Floating Badges & Accents */
+.animate-float-slow {
+  animation: pureFloat 4.5s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.animate-pulse-gold {
+  animation: purePulseBadge 3s ease-in-out infinite;
+  will-change: transform, box-shadow;
+}
+
+/* Respect user preference for reduced motion for accessibility and speed */
+@media (prefers-reduced-motion: reduce) {
+  .animate-heading,
+  .animate-subheading,
+  .animate-box,
+  .animate-float-slow,
+  .animate-pulse-gold {
+    animation: none !important;
+    transform: none !important;
+  }
+  .box-hover-lift {
+    transition: none !important;
+  }
+}
