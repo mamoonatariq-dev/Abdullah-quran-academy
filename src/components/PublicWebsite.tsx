@@ -334,27 +334,27 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
   const teachers = [
     {
       name: 'Umme Abdullah',
-      role: 'Senior Tajweed Scholar & Ijazah Holder',
+      role: 'Alimah Fazilah, Senior Tajweed Scholar & Ijazah Holder',
       exp: '12 yrs teaching experience',
       initials: 'UA',
       bg: 'bg-emerald-800',
-      specs: ['12 Yrs Experience', 'Ijazah Holder', 'Al-Qawl al-Mufeed'],
+      specs: ['Alimah Fazilah', '12 Yrs Experience', 'Ijazah Holder'],
     },
     {
       name: 'Sadia Samee',
-      role: 'Alimah Fazilah, Tajweed Scholar & Tafseer Lecturer',
+      role: 'Basic Tajweed & Quran Reading',
       exp: '10+ yrs teaching',
       initials: 'SS',
       bg: 'bg-indigo-900',
-      specs: ['Alimah Fazilah', 'Basic Tajweed', 'Tafseer Lecturer'],
+      specs: ['Basic Tajweed', 'Quran Reading', 'Tafseer Lecturer'],
     },
     {
       name: 'Mamoona Tariq',
-      role: 'Certified Qaida & Ijazah Holder',
+      role: 'Tajweed & Ijazah Holder',
       exp: '8+ yrs teaching',
       initials: 'MT',
       bg: 'bg-amber-700',
-      specs: ['Certified Qaida', 'Ijazah Holder', 'Kids Specialist'],
+      specs: ['Tajweed', 'Ijazah Holder', 'Kids Specialist'],
     },
     {
       name: 'Saima Sohail',
