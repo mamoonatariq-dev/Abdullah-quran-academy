@@ -79,8 +79,8 @@ export const QuranLogo: React.FC<QuranLogoProps> = ({
           height={size}
           loading="eager"
           decoding="async"
-          style={{ height: `${size}px` }}
-          className="w-auto max-h-[58px] xs:max-h-[68px] sm:max-h-[85px] md:max-h-[95px] object-contain drop-shadow-xs"
+          style={{ height: `${size}px`, maxHeight: `${size}px` }}
+          className="w-auto max-w-full object-contain drop-shadow-xs"
           referrerPolicy="no-referrer"
         />
       </div>
