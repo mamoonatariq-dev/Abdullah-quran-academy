@@ -54,8 +54,15 @@ export function resolveCleanCanonicalUrl(
     extractedPath = '/' + extractedPath;
   }
 
-  // 7. Strip trailing slashes (e.g. /courses/ -> /courses; root '/' becomes '')
-  extractedPath = extractedPath.replace(/\/+$/, '');
+  // 7. For blog URLs, enforce trailing slash as per structure (/blog/ and /blog/:slug/)
+  if (extractedPath.startsWith('/blog')) {
+    if (!extractedPath.endsWith('/')) {
+      extractedPath = extractedPath + '/';
+    }
+  } else {
+    // Strip trailing slashes for standard page paths (e.g. /courses/ -> /courses)
+    extractedPath = extractedPath.replace(/\/+$/, '');
+  }
 
   return `${domain}${extractedPath}`;
 }

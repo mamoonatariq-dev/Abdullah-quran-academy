@@ -81,6 +81,54 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Prevent Netlify badge overlap by removing injected badge elements -->
+    <script>
+      (function() {
+        function purgeNetlifyBadge() {
+          try {
+            var selectors = [
+              '[data-netlify-drawer]',
+              '#netlify-drawer',
+              '.netlify-badge',
+              '[class*="netlify-badge"]',
+              'iframe[title*="Netlify" i]',
+              'iframe[src*="netlify" i]',
+              'div:has(> iframe[title*="Netlify" i])',
+              'div:has(> iframe[src*="netlify" i])'
+            ];
+            selectors.forEach(function(sel) {
+              try {
+                document.querySelectorAll(sel).forEach(function(el) {
+                  el.style.setProperty('display', 'none', 'important');
+                  el.remove();
+                });
+              } catch(e) {}
+            });
+            document.querySelectorAll('div, iframe, aside').forEach(function(el) {
+              if (el.id === 'floating-whatsapp-widget' || el.id === 'root') return;
+              var text = (el.innerText || el.textContent || '').toLowerCase();
+              var aria = (el.getAttribute('aria-label') || '').toLowerCase();
+              if ((text.includes('powered by netlify') || aria.includes('powered by netlify')) && !el.contains(document.getElementById('root'))) {
+                el.style.setProperty('display', 'none', 'important');
+                el.remove();
+              }
+            });
+          } catch(err) {}
+        }
+        if (typeof window !== 'undefined') {
+          window.addEventListener('DOMContentLoaded', purgeNetlifyBadge);
+          window.addEventListener('load', purgeNetlifyBadge);
+          var obs = new MutationObserver(purgeNetlifyBadge);
+          if (document.body) {
+            obs.observe(document.body, { childList: true, subtree: true });
+          } else {
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.body) obs.observe(document.body, { childList: true, subtree: true });
+            });
+          }
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

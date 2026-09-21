@@ -108,6 +108,27 @@
   will-change: transform, box-shadow;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Netlify Badge & Feedback Drawer Suppression */
+/* -------------------------------------------------------------------------- */
+[data-netlify-drawer],
+#netlify-drawer,
+.netlify-badge,
+[class*="netlify-badge"],
+[class*="NetlifyBadge"],
+iframe[id*="netlify"],
+iframe[title*="Netlify" i],
+iframe[src*="netlify" i],
+div:has(> iframe[src*="netlify" i]),
+div:has(> iframe[title*="Netlify" i]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 /* Respect user preference for reduced motion for accessibility and speed */
 @media (prefers-reduced-motion: reduce) {
   .animate-heading,

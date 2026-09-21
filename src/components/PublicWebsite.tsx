@@ -6,7 +6,9 @@ import { CourseDetailView } from './CourseDetailView';
 import { FreeTrialView } from './FreeTrialView';
 import { CoreCoursesView } from './CoreCoursesView';
 import { ContactUsView } from './ContactUsView';
+import { BlogPageView } from './BlogPageView';
 import { coursesData } from '../data/coursesData';
+import { blogArticles } from '../data/blogData';
 import girlReadingQuranImg from '../assets/images/girl_reading_quran.jpg';
 import {
   ACADEMY_PHONE,
@@ -65,10 +67,11 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
   onOpenDashboard,
 }) => {
   const [pageView, setPageView] = useState<
-    'home' | 'courses-hub' | 'core-courses' | 'course-detail' | 'free-trial' | 'contact-us'
+    'home' | 'courses-hub' | 'core-courses' | 'course-detail' | 'free-trial' | 'contact-us' | 'blog'
   >('home');
   const [selectedCourseId, setSelectedCourseId] = useState<string>('noorani-qaida');
   const [preselectedCourse, setPreselectedCourse] = useState<string>('');
+  const [currentBlogSlug, setCurrentBlogSlug] = useState<string>('');
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [demoForm, setDemoForm] = useState({
     name: '',
@@ -86,37 +89,99 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [showWhatsAppTooltip, setShowWhatsAppTooltip] = useState<boolean>(true);
 
+  // Sync with browser URL navigation and handle popstate (Back/Forward)
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      if (path.startsWith('/blog')) {
+        const parts = path.split('/').filter(Boolean); // ['blog', 'how-to-learn-quran-online']
+        const slug = parts[1];
+        setPageView('blog');
+        setCurrentBlogSlug(slug || '');
+      } else if (path === '/core-courses') {
+        setPageView('core-courses');
+      } else if (path === '/online-quran-courses') {
+        setPageView('courses-hub');
+      } else if (path.startsWith('/courses/')) {
+        const slug = path.replace('/courses/', '').replace(/\/+$/, '');
+        const course = coursesData.find((c) => c.slug === slug);
+        if (course) {
+          setSelectedCourseId(course.id);
+          setPageView('course-detail');
+        }
+      } else if (path === '/free-trial') {
+        setPageView('free-trial');
+      } else if (path === '/contact-us') {
+        setPageView('contact-us');
+      } else if (path === '/' || path === '') {
+        setPageView('home');
+      }
+    };
+
+    handlePopState();
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   useEffect(() => {
     let title = 'Online Quran Academy UK | Kids & Females | 1-on-1 Tutors';
     let description =
       'Learn Quran online with certified female tutors in the UK. Flexible 1-to-1 UK schedules for kids & sisters. Book your 3-Day Free Trial today!';
+    let canonicalUrl = 'https://abdullahquranacademy.co.uk/';
 
     if (pageView === 'home') {
       title = 'Online Quran Academy UK | Kids & Females | 1-on-1 Tutors';
       description =
         'Learn Quran online with certified female tutors in the UK. Flexible 1-to-1 UK schedules for kids & sisters. Book your 3-Day Free Trial today!';
+      canonicalUrl = 'https://abdullahquranacademy.co.uk/';
     } else if (pageView === 'core-courses') {
       title = 'Core Quran Courses | Abdullah Quran Academy UK';
       description =
         'Explore our 5 core online Quran courses for kids and sisters in the UK. 1-on-1 female tutors for Noorani Qaida, Tajweed reading, Hifdh, Tafseer, and Ijazah.';
+      canonicalUrl = 'https://abdullahquranacademy.co.uk/core-courses';
     } else if (pageView === 'courses-hub') {
       title = 'Online Quran Courses Hub | Abdullah Quran Academy UK';
       description =
         'Explore accredited online Quran courses for kids and females in the UK. Noorani Qaida, Quran Reading, Tajweed, Hifdh, and Tafseer with 1-to-1 certified tutors.';
+      canonicalUrl = 'https://abdullahquranacademy.co.uk/online-quran-courses';
     } else if (pageView === 'course-detail') {
       const course = coursesData.find((c) => c.id === selectedCourseId);
       title = course ? `${course.title} | Abdullah Quran Academy UK` : 'Online Quran Course | Abdullah Quran Academy UK';
       if (course) {
         description = course.description;
+        canonicalUrl = `https://abdullahquranacademy.co.uk/courses/${course.slug}`;
       }
     } else if (pageView === 'free-trial') {
       title = 'Book 3-Day Free Online Quran Trial Class | Abdullah Quran Academy UK';
       description =
         'Book your 3-day free online Quran trial class in the UK. One-to-one lessons for kids and sisters with certified female Quran tutors on Zoom. No credit card required.';
+      canonicalUrl = 'https://abdullahquranacademy.co.uk/free-trial';
     } else if (pageView === 'contact-us') {
       title = 'Contact Us | Abdullah Quran Academy UK Admissions';
       description =
         'Contact Abdullah Quran Academy UK admissions desk. Email abdullahquranacademy1998@gmail.com or WhatsApp +44 7446 361983 for 1-on-1 Quran classes for kids and sisters.';
+      canonicalUrl = 'https://abdullahquranacademy.co.uk/contact-us';
+    } else if (pageView === 'blog') {
+      if (currentBlogSlug) {
+        const article = blogArticles.find(
+          (a) => a.slug === currentBlogSlug || a.id === currentBlogSlug
+        );
+        if (article) {
+          title = `${article.metaTitle || article.title} | Abdullah Quran Academy`;
+          description = article.metaDescription || article.excerpt;
+          canonicalUrl = `https://abdullahquranacademy.co.uk/blog/${article.slug}/`;
+        } else {
+          title = 'Islamic & Quran Learning Blog | Abdullah Quran Academy';
+          description =
+            'Discover useful Quran learning resources, Islamic guidance, Tajweed tips, Quran reading lessons, and educational articles at Abdullah Quran Academy.';
+          canonicalUrl = 'https://abdullahquranacademy.co.uk/blog/';
+        }
+      } else {
+        title = 'Islamic & Quran Learning Blog | Abdullah Quran Academy';
+        description =
+          'Discover useful Quran learning resources, Islamic guidance, Tajweed tips, Quran reading lessons, and educational articles at Abdullah Quran Academy.';
+        canonicalUrl = 'https://abdullahquranacademy.co.uk/blog/';
+      }
     }
 
     document.title = title;
@@ -143,24 +208,6 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
     }
 
     // Dynamic canonical link tag for SEO
-    let canonicalUrl = 'https://quranacademy.co.uk/';
-    if (pageView === 'home') {
-      canonicalUrl = 'https://quranacademy.co.uk/';
-    } else if (pageView === 'core-courses') {
-      canonicalUrl = 'https://quranacademy.co.uk/core-courses';
-    } else if (pageView === 'courses-hub') {
-      canonicalUrl = 'https://quranacademy.co.uk/online-quran-courses';
-    } else if (pageView === 'course-detail') {
-      const course = coursesData.find((c) => c.id === selectedCourseId);
-      canonicalUrl = course
-        ? `https://quranacademy.co.uk/courses/${course.slug}`
-        : 'https://quranacademy.co.uk/online-quran-courses';
-    } else if (pageView === 'free-trial') {
-      canonicalUrl = 'https://quranacademy.co.uk/free-trial';
-    } else if (pageView === 'contact-us') {
-      canonicalUrl = 'https://quranacademy.co.uk/contact-us';
-    }
-
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (canonicalLink) {
       canonicalLink.setAttribute('href', canonicalUrl);
@@ -170,19 +217,46 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
       canonicalLink.setAttribute('href', canonicalUrl);
       document.head.appendChild(canonicalLink);
     }
-  }, [pageView, selectedCourseId]);
+  }, [pageView, selectedCourseId, currentBlogSlug]);
 
   const navigateTo = (
-    view: 'home' | 'courses-hub' | 'core-courses' | 'course-detail' | 'free-trial' | 'contact-us',
+    view: 'home' | 'courses-hub' | 'core-courses' | 'course-detail' | 'free-trial' | 'contact-us' | 'blog',
     courseId?: string,
     courseName?: string,
-    hash?: string
+    hash?: string,
+    blogSlug?: string
   ) => {
     if (courseId) setSelectedCourseId(courseId);
     if (courseName) setPreselectedCourse(courseName);
+    setCurrentBlogSlug(blogSlug || '');
     setPageView(view);
     setIsCoursesDropdownOpen(false);
     setIsMobileMenuOpen(false);
+
+    // Sync browser URL according to exact SEO structure
+    let targetPath = '/';
+    if (view === 'core-courses') {
+      targetPath = '/core-courses';
+    } else if (view === 'courses-hub') {
+      targetPath = '/online-quran-courses';
+    } else if (view === 'course-detail' && courseId) {
+      const course = coursesData.find((c) => c.id === courseId);
+      targetPath = course ? `/courses/${course.slug}` : '/online-quran-courses';
+    } else if (view === 'free-trial') {
+      targetPath = '/free-trial';
+    } else if (view === 'contact-us') {
+      targetPath = '/contact-us';
+    } else if (view === 'blog') {
+      targetPath = blogSlug ? `/blog/${blogSlug}/` : '/blog/';
+    }
+
+    if (window.location.pathname !== targetPath) {
+      try {
+        window.history.pushState({ view, courseId, blogSlug }, '', targetPath);
+      } catch (err) {
+        // Safe fallback in sandboxed frames
+      }
+    }
 
     if (hash) {
       setTimeout(() => {
@@ -522,6 +596,20 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
               <span>Tajweed Book</span>
             </button>
 
+            {/* Blog Page Nav Link */}
+            <button
+              type="button"
+              onClick={() => navigateTo('blog')}
+              className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+                pageView === 'blog'
+                  ? 'bg-[#0b3c2d] text-amber-300 shadow-xs'
+                  : 'text-gray-700 hover:text-[#0b3c2d] hover:bg-emerald-50'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-600" />
+              <span>Blog</span>
+            </button>
+
             {/* Contact Us Page Link */}
             <button
               type="button"
@@ -616,6 +704,19 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
               type="button"
               onClick={() => {
                 setIsMobileMenuOpen(false);
+                navigateTo('blog');
+              }}
+              className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-2 ${
+                pageView === 'blog' ? 'bg-[#0b3c2d] text-amber-300' : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5 text-emerald-700" />
+              <span>Islamic &amp; Quran Learning Blog</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
                 navigateTo('contact-us');
               }}
               className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-2 ${
@@ -694,6 +795,10 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
           onGoToHome={() => navigateTo('home')}
           onGoToCoursesHub={() => navigateTo('courses-hub')}
         />
+      )}
+
+      {pageView === 'blog' && (
+        <BlogPageView currentSlug={currentBlogSlug} onNavigate={navigateTo} />
       )}
 
       {/* Page 1: Homepage (Main Authority Page with Section-by-Section Architecture) */}
@@ -1722,6 +1827,82 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
         </div>
       </section>
 
+      {/* Latest from Our Blog Teaser (Homepage) */}
+      <section className="py-16 bg-[#FAF8F5] border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-gray-200 gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-emerald-800 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Knowledge &amp; Guidance
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mt-1">
+                Islamic &amp; Quran Learning Blog
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigateTo('blog')}
+              className="inline-flex items-center gap-2 text-xs font-bold text-emerald-800 hover:text-emerald-950 uppercase tracking-wider cursor-pointer"
+            >
+              <span>Explore All {blogArticles.length} Articles</span>
+              <ArrowRight className="w-4 h-4 text-amber-500" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            {blogArticles.slice(0, 3).map((article) => (
+              <article
+                key={`home-blog-${article.slug}`}
+                onClick={() => navigateTo('blog', undefined, undefined, undefined, article.slug)}
+                className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+              >
+                <div>
+                  <div className="relative aspect-16/10 bg-gray-100 overflow-hidden">
+                    <img
+                      src={article.image}
+                      alt={article.imageAlt}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                    />
+                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded bg-[#0b3c2d]/90 text-amber-300 text-[11px] font-bold">
+                      {article.category}
+                    </span>
+                  </div>
+                  <div className="p-5 space-y-2">
+                    <div className="text-[11px] text-gray-500 flex items-center gap-2">
+                      <span>{article.publishedDate}</span>
+                      <span>•</span>
+                      <span>{article.readTime}</span>
+                    </div>
+                    <h3 className="font-serif font-bold text-base text-gray-900 group-hover:text-emerald-800 transition-colors line-clamp-2">
+                      {article.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                  </div>
+                </div>
+                <div className="px-5 pb-5 pt-2 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-xs text-gray-500">{article.author.name}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigateTo('blog', undefined, undefined, undefined, article.slug);
+                    }}
+                    className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Read Article</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-amber-500" />
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Trust Badges */}
       <section className="bg-white py-10 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -1896,6 +2077,15 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
                     className="hover:text-amber-300 transition-colors flex items-center gap-1.5 cursor-pointer text-left"
                   >
                     <span className="text-amber-400">›</span> Online Quran Courses (Page 2)
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => navigateTo('blog')}
+                    className="hover:text-amber-300 transition-colors flex items-center gap-1.5 cursor-pointer text-left text-amber-200 font-semibold"
+                  >
+                    <span className="text-amber-400">›</span> Islamic &amp; Quran Learning Blog
                   </button>
                 </li>
                 <li>
@@ -2462,7 +2652,7 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
       <aside
         id="floating-whatsapp-widget"
         aria-label="WhatsApp Contact Support"
-        className="fixed bottom-5 sm:bottom-6 right-5 sm:right-6 z-50 flex items-center gap-3"
+        className="fixed bottom-6 sm:bottom-8 right-5 sm:right-6 z-50 flex items-center gap-3"
       >
         {showWhatsAppTooltip && (
           <div className="hidden sm:flex items-center gap-2.5 bg-white text-gray-900 pl-3.5 pr-2 py-2 rounded-2xl shadow-xl border border-emerald-100 text-xs font-semibold animate-fade-in ring-1 ring-black/5">
