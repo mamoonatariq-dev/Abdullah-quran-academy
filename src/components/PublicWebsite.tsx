@@ -446,6 +446,14 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
       bg: 'bg-emerald-900',
       specs: ['Certified Qaida', 'Quran Reading', 'Basic Tajweed'],
     },
+    {
+      name: 'Munazza Sultana',
+      role: 'Pursuing Ijazah Course & Tajweed Teacher',
+      exp: '5 yrs online teaching',
+      initials: 'MS',
+      bg: 'bg-teal-800',
+      specs: ['Pursuing Ijazah Course', '5 Yrs Online Teaching', 'Tajweed & Qaida'],
+    },
   ];
 
   const faqSchema = {
@@ -1161,22 +1169,24 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
             <p className="animate-subheading text-xs text-gray-500 mt-1">Certified Female Scholars, Ijazah Holders & Qaida Specialists — safe, dedicated 1-on-1 private classes for young learners and sisters.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {teachers.map((t, idx) => (
-              <div key={idx} className="bg-white rounded-2xl border border-gray-200 p-5 text-center shadow-xs box-hover-lift animate-box space-y-3">
-                <div className={`w-16 h-16 mx-auto rounded-full ${t.bg} text-white flex items-center justify-center font-bold text-xl shadow-inner`}>
-                  {t.initials}
+              <div key={idx} className="bg-white rounded-2xl border border-gray-200 p-6 text-center shadow-xs box-hover-lift animate-box flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className={`w-16 h-16 mx-auto rounded-full ${t.bg} text-white flex items-center justify-center font-bold text-xl shadow-inner`}>
+                    {t.initials}
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-base text-gray-900">{t.name}</h3>
+                    <p className="text-xs font-semibold text-emerald-700 mt-0.5">{t.role}</p>
+                    <div className="text-[11px] text-gray-500 font-medium mt-1">{t.exp}</div>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="font-bold text-sm text-gray-900">{t.name}</h3>
-                  <p className="text-[11px] font-semibold text-emerald-700">{t.role}</p>
-                  <div className="text-[10px] text-gray-500 font-medium mt-0.5">{t.exp}</div>
-                </div>
-
-                <div className="flex flex-wrap justify-center gap-1 pt-1">
+                <div className="flex flex-wrap justify-center gap-1.5 pt-1">
                   {t.specs.map((s, i) => (
-                    <span key={i} className="px-2 py-0.5 bg-amber-50 border border-amber-200 text-amber-900 text-[10px] font-medium rounded-full">
+                    <span key={i} className="px-2.5 py-1 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-medium rounded-full">
                       {s}
                     </span>
                   ))}
