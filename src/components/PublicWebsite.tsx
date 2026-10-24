@@ -408,35 +408,35 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
   const teachers = [
     {
       name: 'Umme Abdullah',
-      role: 'Alimah Fazilah, Senior Tajweed Scholar & Ijazah Holder',
+      role: 'BA in Politics, Alimah Fazilah, Senior Tajweed Scholar & Ijazah Holder',
       exp: '12 yrs teaching experience',
       initials: 'UA',
       bg: 'bg-emerald-800',
-      specs: ['Alimah Fazilah', '12 Yrs Experience', 'Ijazah Holder'],
+      specs: ['BA in Politics', 'Alimah Fazilah', 'Ijazah Holder'],
     },
     {
       name: 'Sadia Samee',
-      role: 'Basic Tajweed & Quran Reading',
+      role: 'MA Urdu, Pursuing Ijaza, Basic Tajweed & Quran Reading',
       exp: '10+ yrs teaching',
       initials: 'SS',
       bg: 'bg-indigo-900',
-      specs: ['Basic Tajweed', 'Quran Reading', 'Tafseer Lecturer'],
+      specs: ['MA Urdu', 'Pursuing Ijaza', 'Basic Tajweed'],
     },
     {
       name: 'Mamoona Tariq',
-      role: 'Tajweed & Ijazah Holder',
+      role: 'MA Urdu, Continuing Ijaza & Tajweed Specialist',
       exp: '8+ yrs teaching',
       initials: 'MT',
       bg: 'bg-amber-700',
-      specs: ['Tajweed', 'Ijazah Holder', 'Kids Specialist'],
+      specs: ['MA Urdu', 'Continuing Ijaza', 'Kids Specialist'],
     },
     {
       name: 'Saima Sohail',
-      role: 'Certified Qaida, Tajweed & Ijazah Holder',
+      role: 'FA, CT, Pursuing Ijaza & Certified Qaida',
       exp: '7+ yrs teaching',
       initials: 'SS',
       bg: 'bg-teal-800',
-      specs: ['Certified Qaida', 'Ijazah Holder', 'Quran Reading'],
+      specs: ['FA, CT', 'Pursuing Ijaza', 'Certified Qaida'],
     },
     {
       name: 'Saleha Ali',
@@ -448,11 +448,11 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({
     },
     {
       name: 'Munazza Sultana',
-      role: 'Pursuing Ijazah Course & Tajweed Teacher',
+      role: 'MA English, Pursuing Ijazah Course & Tajweed',
       exp: '5 yrs online teaching',
       initials: 'MS',
       bg: 'bg-teal-800',
-      specs: ['Pursuing Ijazah Course', '5 Yrs Online Teaching', 'Tajweed & Qaida'],
+      specs: ['MA English', 'Pursuing Ijazah', '5 Yrs Experience'],
     },
   ];
 

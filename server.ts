@@ -7,7 +7,7 @@ import { GoogleGenAI } from '@google/genai';
 import { initialItems, initialSettings } from './src/data/initialData.ts';
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json({ limit: '20mb' }));
 
@@ -365,15 +365,19 @@ app.post('/api/contact', async (req, res) => {
 // VITE / STATIC SERVING & DYNAMIC CANONICAL SEO TAGS
 // --------------------------------------------------------------------------
 async function start() {
-  if (process.env.NODE_ENV !== 'production') {
+  const distPath = path.join(process.cwd(), 'dist');
+  const indexHtmlPath = path.join(distPath, 'index.html');
+  const isProduction =
+    process.env.NODE_ENV === 'production' ||
+    (fs.existsSync(indexHtmlPath) && process.env.NODE_ENV !== 'development');
+
+  if (!isProduction) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    const indexHtmlPath = path.join(distPath, 'index.html');
     app.use(express.static(distPath));
 
     app.get('*', (req, res) => {

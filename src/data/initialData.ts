@@ -1,4 +1,4 @@
-import { SeoItem, AppSettings } from '../types';
+import type { SeoItem, AppSettings } from '../types.ts';
 
 export const initialSettings: AppSettings = {
   titleSeparator: '|',
